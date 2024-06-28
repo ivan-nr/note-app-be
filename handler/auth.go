@@ -15,7 +15,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// CheckPasswordHash compare password with hash
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
@@ -33,7 +32,6 @@ func getUserByUsername(u string) (*model.User, error) {
 	return &user, nil
 }
 
-// Login get user and password
 func Login(c *fiber.Ctx) error {
 	type LoginInput struct {
 		Username string `json:"username"`
@@ -62,7 +60,7 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Internal Server Error", "data": err})
 	} else if userModel == nil {
 		CheckPasswordHash(pass, "")
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid identity or password", "data": err})
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid username or password", "data": err})
 	} else {
 		userData = UserData{
 			ID:       userModel.ID,

@@ -26,12 +26,10 @@ func GetNote(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "note found", "data": note})
 }
 
-
 func CreateNote(c *fiber.Ctx) error {
 	db := database.DB
 	note := new(model.Note)
 
-	// Retrieve the user ID from the context
 	userId := c.Locals("user_id").(int)
 
 	if err := c.BodyParser(note); err != nil {
@@ -44,8 +42,6 @@ func CreateNote(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{"status": "success", "message": "Created note", "data": note})
 }
-
-
 
 func DeleteNote(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -60,7 +56,6 @@ func DeleteNote(c *fiber.Ctx) error {
 	db.Delete(&note)
 	return c.JSON(fiber.Map{"status": "success", "message": "note successfully deleted", "data": nil})
 }
-
 
 func UpdateNote(c *fiber.Ctx) error {
 	id := c.Params("id")

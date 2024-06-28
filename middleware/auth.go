@@ -8,13 +8,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// Protected protect routes
 func Protected() fiber.Handler {
 	return jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte(config.Config("SECRET"))},
-		ErrorHandler: jwtError,
+		SigningKey:     jwtware.SigningKey{Key: []byte(config.Config("SECRET"))},
+		ErrorHandler:   jwtError,
 		SuccessHandler: jwtSuccess,
-		ContextKey: "user",
+		ContextKey:     "user",
 	})
 }
 
@@ -28,11 +27,9 @@ func jwtError(c *fiber.Ctx, err error) error {
 }
 
 func jwtSuccess(c *fiber.Ctx) error {
-	// Get the user claims from the token
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	
-	// Extract the user ID from the claims and store it in the context
+
 	userID := claims["user_id"].(float64)
 	c.Locals("user_id", int(userID))
 
