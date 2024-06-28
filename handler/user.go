@@ -29,7 +29,6 @@ func validToken(t *jwt.Token, id string) bool {
 	return uid == n
 }
 
-// GetUser get a user
 func GetUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := database.DB
@@ -41,7 +40,6 @@ func GetUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "User found", "data": user})
 }
 
-// GetUsers get all users
 func GetUsers(c *fiber.Ctx) error {
 	db := database.DB
 	var users []model.User
@@ -49,7 +47,6 @@ func GetUsers(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "Users found", "data": users})
 }
 
-// CreateUser new user
 func CreateUser(c *fiber.Ctx) error {
 	type NewUser struct {
 		Username string `json:"username"`
@@ -82,10 +79,9 @@ func CreateUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "User successfully created", "data": newUser})
 }
 
-// UpdateUser update user
 func UpdateUser(c *fiber.Ctx) error {
 	type UpdateUserInput struct {
-		Name string `json:"name"`
+		Name     string `json:"name"`
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
@@ -119,14 +115,12 @@ func UpdateUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "User successfully updated", "data": user})
 }
 
-// DeleteUser delete user
 func DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := database.DB
 
 	var user model.User
 
-	// Check if the user exists
 	if err := db.First(&user, id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return c.Status(404).JSON(fiber.Map{
@@ -142,7 +136,6 @@ func DeleteUser(c *fiber.Ctx) error {
 		})
 	}
 
-	// Delete the user
 	if err := db.Delete(&user).Error; err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  "error",
