@@ -8,4 +8,4 @@ COPY go.mod ./
 RUN go mod download && go mod verify
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8080
